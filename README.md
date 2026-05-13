@@ -1,6 +1,3 @@
-أكيد، هذا **README.md كامل** جاهز تنسخيه وتحطيه بدل الموجود كاملًا في GitHub:
-
-```markdown
 # Scalable Graph-Based Financial Fraud Detection on Elliptic++
 
 This repository contains the implementation notebook for a Big Data course project on scalable graph-based financial fraud detection using the full Elliptic++ Actors Dataset.
@@ -59,9 +56,10 @@ The implementation follows these main steps:
     - Logistic Regression with original features
     - Logistic Regression with graph-enhanced features
     - Random Forest with graph-enhanced features
-11. Measure prediction metrics, speedup, and efficiency for graph feature extraction.
+11. Measure prediction metrics, speedup, efficiency, and throughput for graph feature extraction.
 12. Run Spark Standalone Mode locally using one Spark Master and four Worker JVM processes.
 13. Compare Spark Standalone partition results using 1, 2, 4, and 8 partitions.
+14. Document Spark Standalone process evidence showing one Master and four Worker processes.
 
 ## Implemented Models
 
@@ -105,33 +103,22 @@ In addition to the previous Spark local[*] experiment, a Spark Standalone experi
 
 The same AddrAddr_edgelist degree-extraction task was tested using 1, 2, 4, and 8 Spark partitions. The standalone results showed that increasing the number of partitions did not improve runtime in the local Colab environment, mainly because of Spark overhead, worker communication cost, and shuffle cost.
 
-| Execution Setting | Runtime | Speedup | Efficiency |
-|---|---:|---:|---:|
-| Spark Standalone 1 partition | 25.5570 s | 1.0000x | 1.0000 |
-| Spark Standalone 2 partitions | 63.7371 s | 0.4010x | 0.2005 |
-| Spark Standalone 4 partitions | 39.8322 s | 0.6416x | 0.1604 |
-| Spark Standalone 8 partitions | 33.7050 s | 0.7583x | 0.0948 |
+| Execution Setting | Runtime | Speedup | Efficiency | Throughput |
+|---|---:|---:|---:|---:|
+| Spark Standalone 1 partition | 25.5570 s | 1.0000x | 1.0000 | 112,257.52 edges/s |
+| Spark Standalone 2 partitions | 63.7371 s | 0.4010x | 0.2005 | 45,012.45 edges/s |
+| Spark Standalone 4 partitions | 39.8322 s | 0.6416x | 0.1604 | 72,026.17 edges/s |
+| Spark Standalone 8 partitions | 33.7050 s | 0.7583x | 0.0948 | 85,119.71 edges/s |
 
 All Spark Standalone runs produced the same number of unique graph-degree nodes: 822,942.
 
-## Repository Contents
+## Spark Standalone Process Evidence
 
-- `financial_fraud_detection.ipynb`  
-  Main implementation notebook.
+The Spark Standalone setup was verified using Java process inspection. The executed experiment documented one Spark Master process and four Spark Worker JVM processes:
 
-- `README.md`  
-  Project description and summary.
-
-## Notes
-
-This project was developed for the Big Data course ICTS 6339. The implementation focuses on full-dataset processing, graph-based feature engineering, model evaluation, and system-level timing analysis.
-
-The project does not claim to implement a true temporal GNN. Temporal GNN models are treated as future work.
-
-## Main Limitations
-
-- The Spark Standalone experiment was executed on one Google Colab machine, not on a real physical multi-node cluster.
-- Exact hardware details such as CPU, RAM, and OS were not printed in the notebook.
-- A full column-wise missing-value audit was not printed in the notebook.
-- Temporal GNN models were not trained.
-```
+```text
+40682 Master
+41185 Worker
+41236 Worker
+41287 Worker
+41336 Worker
